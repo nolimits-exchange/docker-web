@@ -30,12 +30,13 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
     && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
 
-RUN docker-php-ext-install \
+RUN docker-php-ext-install xdebug-$XDEBUG_VERSION
+
+RUN docker-php-ext-enable \
     sockets \
     pcntl \
     bcmath \
     pdo_mysql \
-    xdebug-$XDEBUG_VERSION \
     zip \
     bz2 \
     xsl \
