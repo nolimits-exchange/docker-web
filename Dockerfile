@@ -54,3 +54,5 @@ RUN php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !==
   && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot \
   && rm -rf /tmp/composer-setup.php \
   && composer global require "hirak/prestissimo:^0.3"
+  
+WORKDIR /var/www/nolimits
