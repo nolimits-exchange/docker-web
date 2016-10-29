@@ -46,6 +46,7 @@ RUN docker-php-ext-install \
 
 ADD 20-xdebug.ini /usr/local/etc/php/conf.d/20-xdebug.ini
 ADD 20-blackfire.ini /usr/local/etc/php/conf.d/20-blackfire.ini
+ADD 20-performance.ini /usr/local/etc/php/conf.d/20-performance.ini
 ADD 20-nolimits.conf /etc/apache2/sites-enabled/20-nolimits.conf
 
 ADD https://getcomposer.org/installer /tmp/composer-setup.php
