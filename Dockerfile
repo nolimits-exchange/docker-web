@@ -1,6 +1,6 @@
 FROM php:7-apache
 
-ENV COMPOSER_VERSION "master"
+ENV COMPOSER_VERSION "1.3.0"
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV XDEBUG_VERSION="2.5.0"
 
@@ -51,7 +51,7 @@ ADD 20-nolimits.conf /etc/apache2/sites-enabled/20-nolimits.conf
 ADD https://getcomposer.org/installer /tmp/composer-setup.php
 ADD https://composer.github.io/installer.sig /tmp/composer-setup.sig
 RUN php -r "if (hash('SHA384', file_get_contents('/tmp/composer-setup.php')) !== trim(file_get_contents('/tmp/composer-setup.sig'))) { unlink('/tmp/composer-setup.php'); echo 'Invalid installer' . PHP_EOL; exit(1); }" \
-  && php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot \
+  && php /tmp/composer-setup.php --quiet --no-ansi --install-dir=/usr/local/bin --filename=composer --version="$COMPOSER_VERSION" \
   && rm -rf /tmp/composer-setup.php \
   && composer global require "hirak/prestissimo:^0.3"
   
