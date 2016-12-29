@@ -21,8 +21,7 @@ RUN a2enmod rewrite \
         wget \
     && rm -r /var/lib/apt/lists/*
 
-RUN pecl install "xdebug-$XDEBUG_VERSION" \
-	&& docker-php-ext-enable xdebug
+RUN pecl install "xdebug-$XDEBUG_VERSION"
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
