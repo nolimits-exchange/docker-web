@@ -21,21 +21,20 @@ RUN a2enmod rewrite \
         wget \
     && rm -r /var/lib/apt/lists/*
 
-ADD https://pecl.php.net/get/xdebug-$XDEBUG_VERSION.tgz /usr/src/php/ext/xdebug.tgz
-RUN tar -xf /usr/src/php/ext/xdebug.tgz -C /usr/src/php/ext/ \
-    && rm /usr/src/php/ext/xdebug.tgz
+RUN pecl install "xdebug-$XDEBUG_VERSION" \
+	&& docker-php-ext-enable xdebug
 
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/linux/amd64/$version \
     && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp \
-    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so
+    && mv /tmp/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini
 
-RUN docker-php-ext-install \
+RUN docker-php-ext-install -j$(nproc) \
     sockets \
     pcntl \
     bcmath \
     pdo_mysql \
-    xdebug-$XDEBUG_VERSION \
     zip \
     bz2 \
     xsl \
@@ -43,10 +42,7 @@ RUN docker-php-ext-install \
     gd \
     gettext
 
-ADD 20-xdebug.ini /usr/local/etc/php/conf.d/
-ADD 20-blackfire.ini /usr/local/etc/php/conf.d/20-blackfire.ini
-ADD 20-performance.ini /usr/local/etc/php/conf.d/20-performance.ini
-ADD 20-memory_limit.ini /usr/local/etc/php/conf.d/20-memory_limit.ini
+ADD php.ini /usr/local/etc/php/
 ADD 20-nolimits.conf /etc/apache2/sites-enabled/20-nolimits.conf
 
 ADD https://getcomposer.org/installer /tmp/composer-setup.php
