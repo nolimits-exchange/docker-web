@@ -2,7 +2,7 @@ FROM php:7.1-apache
 
 ENV COMPOSER_VERSION "1.4.1"
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV XDEBUG_VERSION="2.5.0"
+ENV XDEBUG_VERSION="2.5.1"
 
 RUN a2enmod rewrite \
     && apt-get update \
